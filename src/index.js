@@ -4,10 +4,22 @@ import "./index.css";
 import App from "../src/Containers/App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import { legacy_createStore as createStore } from "redux";
-import { searchRobots } from "./reducers";
+import {
+  legacy_createStore as createStore,
+  applyMiddleware,
+  combineReducers,
+} from "redux";
+import { searchRobots, requestRobots } from "./reducers";
 import "tachyons";
-const store = createStore(searchRobots);
+import { createLogger } from "redux-logger";
+import { thunk } from "redux-thunk";
+
+const rootReducer = combineReducers({
+  searchRobots,
+  requestRobots,
+});
+const logger = createLogger();
+const store = createStore(rootReducer, applyMiddleware(thunk, logger));
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
